@@ -1,0 +1,46 @@
+<html>
+<head>
+</head>
+<body>
+<div id="main" style='text-align:center'>
+<p>It's up and running Bois</p>
+<p>We bouta get this _____</p>
+
+<form action='/api/newQuestion' method="POST">
+  <input style="height:50px;width:200px" type="textarea" name="question" placeholder="remember to leave a blank!"/>
+  <input type="submit" name="submit"/>
+</form>
+
+<form action='/api/newAnswer' method="POST">
+  <input style="height:50px;width:200px" type="textarea" name="answer" placeholder="we all know the answer :/"/>
+  <input type="submit" name="submit"/>
+</form>
+
+<table>
+  <tr>
+    <td style="
+    background-color:powderblue;
+    "><strong>Questions</strong></td>
+  </tr>
+<% for(var i = 0; i<questions.length;i++) { %>
+  <tr>
+    <td style="background-color:gray"><%= questions[i].question %></td>
+  </tr>
+<% } %>
+</table>
+<table>
+  <tr>
+    <td style="
+    background-color:powderblue;
+    "><strong>Answers</strong></td>
+  </tr>
+<% for(var i = 0; i <answers.length;i++) { %>
+  <tr>
+    <td style="background-color:gray"><%= answers[i].answer %></td>
+  </tr>
+<% } %>
+</table>
+
+</div>
+</body>
+</html>
