@@ -1,11 +1,52 @@
 <html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    $(function(){
+      setInterval(function(){
+        var inTable = "";
+        $.get("/getPlayers", function(players1, status){
+          for(var i = 0; i < players1.length;i++) {
+            inTable+="<tr><td>" + players1[i].name + "</td><tr>";
+          }
+          $('table').html("<tr><td><strong>Players</strong></td></tr>" + inTable);
+        });
+      }, 1000);
+    });
+    </script>
+    <style>
+    table, tr, td {
+      border: 1px solid black;
+    }
+    .nick {
+      width:200px;
+      height:50px;
+      background-color:black;
+      color:white;
+      outline: none;
+    }
+    </style>
+  </head>
   <body>
-    <div class='form' style='text-align:center'>
-    <form action='/api/addUser' method="POST">
+    <% if(myNickName != 'false') { %>
+      <div id='myUser'><%= myNickName %></div>
+    <% } %>
+    <div id='main' style='text-align:center'>
+    <form action='/addUser' method="POST">
       <h1>Log in</h1>
-      <input style="height:50px;width:200px" type="textarea" name="name" placeholder="Nickname"/>
+      <input class='nick' type="textarea" name="name" placeholder="Nickname"/>
       <input type="submit" name="submit" value="login"/>
     </form>
-    </div>
+    <table align='center'>
+      <tr><td><strong>Players</strong></td></tr>
+      <% for(var i = 0; i < users.length; i ++) { %>
+        <tr><td><%= users[i].name %></td></tr>
+      <% } %>
+    </table>
+    <form action='/startGame' method="POST">
+      <input type="submit" name = "submit" value="Start Game"/>
+      <input style='display:none' type="textarea" name="name" readonly="true" value="<%= myNickName %>"/>
+    </form>
+  </div>
   </body>
 </html>
