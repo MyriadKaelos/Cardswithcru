@@ -1,44 +1,93 @@
 <html>
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+  $(function(){
+    setInterval(function(){
+      var inTable = "";
+      $.get("/getQuestions", function(questions1, status){
+        $.get("/getAnswers", function(answers1, status){
+          if(questions1.length>answers1.length) {
+            for(var i = 0; i < questions1.length; i++) {
+              inTable += "<tr><td>" + questions1[i].question + "</td><td>";
+              if(i < answers1.length) {
+                inTable += answers1[i].length + "</td></tr>";
+              } else { inTable += "</td></tr>"}
+            }
+          } else {
+            for(var i = 0; i < answers1.length; i++) {
+              if(i < questions1.length) {
+                inTable += "<tr><td>" + questions1[i].length + "</td><td>";
+              } else { inTable += "<tr><td></td><td>"}
+              inTable += answers1[i].answer + "</td></tr>";
+            }
+            $('table').html("<tr><td><strong>Questions</strong></td><td><strong>Answers</strong></td></tr>" + inTable);
+          }
+        });
+      });
+    }, 1000);
+  });
+
+  </script>
+  <style>
+  #main {
+    text-align:center;
+  }
+  .add {
+    width:200px;
+    height:50px;
+    background-color:black;
+    color:white;
+    outline: none;
+  }
+  table, tr, td {
+    border: 1px solid black;
+  }
+  </style>
 </head>
 <body>
-<div id="main" style='text-align:center'>
-<p>It's up and running Bois</p>
+<div id="main">
+<p>Add some Cards!</p>
 <p>We bouta get this _____</p>
 
-<form action='/api/newQuestion' method="POST">
-  <input style="height:50px;width:200px" type="textarea" name="question" placeholder="remember to leave a blank!"/>
+<form action='/newQuestion' method="POST">
+  <input class='add' type="textarea" name="question" placeholder="Add a question"/>
   <input type="submit" name="submit"/>
 </form>
 
-<form action='/api/newAnswer' method="POST">
-  <input style="height:50px;width:200px" type="textarea" name="answer" placeholder="we all know the answer :/"/>
+<form action='/newAnswer' method="POST">
+  <input class='add' type="textarea" name="answer" placeholder="Add an Answer"/>
   <input type="submit" name="submit"/>
 </form>
 
-<table>
+<table align='center'>
   <tr>
-    <td style="
-    background-color:powderblue;
-    "><strong>Questions</strong></td>
+    <td><strong>Questions</strong></td>
+    <td><strong>Answers</strong></td>
   </tr>
-<% for(var i = 0; i<questions.length;i++) { %>
-  <tr>
-    <td style="background-color:gray"><%= questions[i].question %></td>
-  </tr>
-<% } %>
-</table>
-<table>
-  <tr>
-    <td style="
-    background-color:powderblue;
-    "><strong>Answers</strong></td>
-  </tr>
-<% for(var i = 0; i <answers.length;i++) { %>
-  <tr>
-    <td style="background-color:gray"><%= answers[i].answer %></td>
-  </tr>
-<% } %>
+  <% if(questions.length>answers.length) { %>
+    <% for(var i = 0;i<questions.length;i++) { %>
+      <tr>
+        <td><%= questions[i].question %></td>
+        <% if(i<answers.length) { %>
+          <td><%= answers[i].answer %></td>
+        <% } else { %>
+          <td></td>
+        <% } %>
+      </tr>
+    <% } %>
+  <% } else { %>
+    <% for(var i = 0;i<answers.length;i++) { %>
+      <tr>
+        <% if(i<questions.length) { %>
+          <td><%= questions[i].question %></td>
+        <% } else { %>
+          <td></td>
+        <% } %>
+        <td><%= answers[i].answer %></td>
+      </tr>
+    <% } %>
+  <% } %>
 </table>
 
 </div>
