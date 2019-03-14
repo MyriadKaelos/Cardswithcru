@@ -1,5 +1,19 @@
 <html>
   <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+    $(function(){
+      setInterval(function(){
+        var inTable = "";
+        $.get("/getPlayers", function(players1, status){
+          for(var i = 0; i < players1.length;i++) {
+            inTable+="<tr><td>" + players1[i].name + "</td><tr>";
+          }
+          $('table').html("<tr><td><strong>Players</strong></td></tr>" + inTable);
+        });
+      }, 1000);
+    });
+    </script>
     <style>
       .sideview {
         position:static;
@@ -18,5 +32,15 @@
     <form action='/restart' method="POST">
       <input class='sideview' type="submit" name = "submit" value="restart"/>
     </form>
+    <table>
+      <tr><strong>Players</strong></tr>
+      <% for(var i = 0; i <users.length;i++) { %>
+        <tr><td><%= users[i].name %></td></tr>
+      <% } %>
+    </table>
+    <table id='hand'>
+    </table>
+    <div id='question'>
+    </div>
   </body>
 </html>
