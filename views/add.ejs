@@ -11,17 +11,35 @@
           if(!status1 || !status2) {console.log(status1 + " " + status2)}
           if(questions1.length>answers1.length) {
             for(var i = 0; i < questions1.length; i++) {
-              inTable += "<tr><td>" + questions1[i].question + "</td><td>";
+              inTable += "<tr><td>" + questions1[i].question +
+              "<form action='/removeQuestion' method='POST'>" +
+                "<input style='display:none' type='textarea' name='question' readonly='true' value='" + questions[i].question + "'/>" +
+                "<input type='submit' name='submit' value='x'/>" +
+              "</form></td><td>";
               if(i < answers1.length) {
-                inTable += answers1[i].answer + "</td></tr>";
+                inTable += answers1[i].answer +
+                "<form action='/removeAnswer' method='POST'>" +
+                  "<input style='display:none' type='textarea' name='answer' readonly='true' value='" + answers1[i].answer + "'/>" +
+                  "<input type='submit' name='submit' value='x'/>" +
+                "</form></td></tr>";
               } else { inTable += "</td></tr>"}
             }
           } else {
             for(var i = 0; i < answers1.length; i++) {
               if(i < questions1.length) {
-                inTable += "<tr><td>" + questions1[i].question + "</td><td>";
-              } else { inTable += "<tr><td></td><td>"}
-              inTable += answers1[i].answer + "</td></tr>";
+                inTable += "<tr><td>" + questions1[i].question +
+                "<form action='/removeQuestion' method='POST'>" +
+                  "<input style='display:none' type='textarea' name='question' readonly='true' value='" + questions[i].question + "'/>" +
+                  "<input type='submit' name='submit' value='x'/>" +
+                "</form></td><td>";
+              } else {
+                inTable += "<tr><td></td><td>"
+              }
+              inTable += answers1[i].answer +
+              "<form action='/removeAnswer' method='POST'>" +
+                "<input style='display:none' type='textarea' name='answer' readonly='true' value='" + answers1[i].answer + "'/>" +
+                "<input type='submit' name='submit' value='x'/>" +
+              "</form></td><tr>";
             }
             $('table').html("<tr><td><strong>Questions</strong></td><td><strong>Answers</strong></td></tr>" + inTable);
           }
@@ -52,9 +70,6 @@
     margin: 5px;
     display: inline-block;
     width:auto;
-  }
-  input {
-    -webkit-appearance:none; 
   }
   </style>
 </head>
@@ -89,9 +104,19 @@
   <% if(questions.length>answers.length) { %>
     <% for(var i = 0;i<questions.length;i++) { %>
       <tr>
-        <td><%= questions[i].question %></td>
+        <td><%= questions[i].question %>
+          <form action='/removeQuestion' method='POST'>
+            <input style='display:none' type="textarea" name="question" readonly="true" value='<%=questions[i].question %>'/>
+            <input type='submit' name='submit' value='x'/>
+          </form>
+        </td>
         <% if(i<answers.length) { %>
-          <td><%= answers[i].answer %></td>
+          <td><%= answers[i].answer %>
+            <form action='/removeAnswer' method='POST'>
+              <input style='display:none' type="textarea" name="answer" readonly="true" value='<%=answers[i].answer %>'/>
+              <input type='submit' name='submit' value='x'/>
+            </form>
+          </td>
         <% } else { %>
           <td></td>
         <% } %>
@@ -101,11 +126,21 @@
     <% for(var i = 0;i<answers.length;i++) { %>
       <tr>
         <% if(i<questions.length) { %>
-          <td><%= questions[i].question %></td>
+          <td><%= questions[i].question %>
+            <form action='/removeQuestion' method='POST'>
+              <input style='display:none' type="textarea" name="question" readonly="true" value='<%=questions[i].question %>'/>
+              <input type='submit' name='submit' value='x'/>
+            </form>
+          </td>
         <% } else { %>
           <td></td>
         <% } %>
-        <td><%= answers[i].answer %></td>
+        <td><%= answers[i].answer %>
+          <form action='/removeAnswer' method='POST'>
+            <input style='display:none' type="textarea" name="answer" readonly="true" value='<%=answers[i].answer %>'/>
+            <input type='submit' name='submit' value='x'/>
+          </form>
+        </td>
       </tr>
     <% } %>
   <% } %>
