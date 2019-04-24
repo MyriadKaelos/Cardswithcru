@@ -16,7 +16,7 @@ router.post('/home', function(req,res) {
 })
 
 router.post('/restart', function(req,res) {
-  db.collection('status').updateOne({},{$set: {next:false,played:[],moved:[]}});
+  db.collection('play').updateOne({},{$set: {question:""}});
   db.collection('users').deleteMany({});
   db.collection('deckA').deleteMany({});
   db.collection('deckQ').deleteMany({});
@@ -133,6 +133,11 @@ router.post('/startGame', function(req,res) {
 
 router.post('/enterLogin', function(req,res) {
   db.collection('users').find({}).toArray((err, users) => {
+    db.collection('play').find({}).toArray((err, play) => {
+      if(play[0].question=="") {
+        db.collection('play').updateOne({},{$set: {question:" "}})
+      }
+    })
     var data = '';
     res.render('login.ejs', {users: users,name: data})
   })
@@ -161,9 +166,17 @@ router.post('/addUser', function(req,res) {
           db.collection('deckA').deleteOne({answer:answer});
           deckA = deckA.filter(cards => cards.answer != answer);
         }
-        db.collection('users').insertOne({name:data,hand:hand,judge:false,wins:[]})
-        db.collection('users').find({}).toArray((err, users) => {
-          res.render('login.ejs', {users: users,name: data})
+        db.collection('users').find({name:req.body.name}).toArray((err, alreadyNamed) => {
+          if(alreadyNamed.length>0) {
+            db.collection('users').find({}).toArray((err, users) => {
+              res.render('login.ejs', {users: users,name: ""})
+            })
+          } else {
+            db.collection('users').insertOne({name:data,hand:hand,judge:false,wins:[]})
+            db.collection('users').find({}).toArray((err, users) => {
+              res.render('login.ejs', {users: users,name:data});
+            })
+          }
         })
       } else {
         res.render('index.ejs');
@@ -198,6 +211,16 @@ router.post('/newAnswer', function(req, res) {
   })
 });
 
+router.post('/removeAnswer', function(req, res) {
+  db.collection('answers').deleteOne({answer:req.body.answer});
+  db.collection('questions').find({}).toArray((err, questions) => {
+    db.collection('answers').find({}).toArray((err, answers) => {
+      if(err) {console.log(err)}
+      res.render('add.ejs', {questions: questions,answers: answers})
+    })
+  })
+})
+
 router.post('/newQuestion', function(req, res) {
   var data = req.body.question
   db.collection('questions').insertOne({question:data})
@@ -209,6 +232,15 @@ router.post('/newQuestion', function(req, res) {
   })
 });
 
+router.post('/romveQuestion', function(req, res) {
+  db.collection('questions').deleteOne({answer:req.body.question});
+  db.collection('questions').find({}).toArray((err, questions) => {
+    db.collection('answers').find({}).toArray((err, answers) => {
+      if(err) {console.log(err)}
+      res.render('add.ejs', {questions: questions,answers: answers})
+    })
+  })
+})
 router.post('/nextRound', function(req, res) {
   db.collection('play').find({}).toArray((err, play) => {
     db.collection('users').find({name:req.body.name}).toArray((err, player) => {
