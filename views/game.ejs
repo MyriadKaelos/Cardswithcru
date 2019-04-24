@@ -15,6 +15,11 @@
           $('#players').html("<tr><td><strong>Players:</strong></td></tr>" + inTable);
         });
         $.get("/getPlay", function(play1, status){
+          if(play1.question=="") {
+            $("body").html("<form action='/home' method='POST'>" +
+                      "<input type='submit' name='submit' value='home'/>" +
+                      "</form>");
+          }
           var judgeHand = "";
           for(var i = 0; i < play1.played.length;i++) {
             judgeHand += "<form action='/choseCard' method='POST' class='hand'>" +
@@ -45,9 +50,6 @@
     });
     </script>
     <style>
-      input {
-        -webkit-appearance: none;
-      }
       .sideview {
         position:static;
         left:10px;
@@ -60,8 +62,11 @@
         float:none;
         width:30%;
       }
+      input {
+        -webkit-appearance: none;
+      }
       .hand input {
-        border-radius:5px;
+        border-radius:0px;
         background-color:black;
         color:white;
         width:100%;
@@ -70,7 +75,8 @@
         text-align:left;
         height:100px;
         word-break:normal;
-        white-space:pre-wrap;font-size:20px
+        font-family:serif;
+        white-space:pre-wrap;font-size:15px
       }
       #question {
         border-radius:0px;
@@ -84,6 +90,7 @@
         right: 5%;
         top: 2%;
         font-size:15px;
+        font-family:monospace;
       }
       #players tr td,#players{
         border: 1px solid black
