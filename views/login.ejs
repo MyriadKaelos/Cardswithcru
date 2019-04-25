@@ -49,6 +49,8 @@
   <body>
     <div class='sideview'><form action='/restart' method="POST">
       <input class='sideview' type="submit" name = "submit" value="restart"/>
+    </form><form action='/home' method="POST">
+      <input class='sideview' type="submit" name = "submit" value="home"/>
     </form></div>
     <% if(name != '') { %>
       <div id='myUser'><%= name %></div>
