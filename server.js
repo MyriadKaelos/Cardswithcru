@@ -233,7 +233,7 @@ router.post('/newQuestion', function(req, res) {
 });
 
 router.post('/removeQuestion', function(req, res) {
-  db.collection('questions').deleteOne({answer:req.body.question});
+  db.collection('questions').deleteOne({question:req.body.question});
   db.collection('questions').find({}).toArray((err, questions) => {
     db.collection('answers').find({}).toArray((err, answers) => {
       if(err) {console.log(err)}
