@@ -13,7 +13,7 @@
             for(var i = 0; i < questions1.length; i++) {
               inTable += "<tr><td>" + questions1[i].question +
               "<form action='/removeQuestion' method='POST'>" +
-                "<input style='display:none' type='textarea' name='question' readonly='true' value='" + questions[i].question + "'/>" +
+                "<input style='display:none' type='textarea' name='question' readonly='true' value='" + questions1[i].question + "'/>" +
                 "<input type='submit' name='submit' value='x'/>" +
               "</form></td><td>";
               if(i < answers1.length) {
@@ -29,7 +29,7 @@
               if(i < questions1.length) {
                 inTable += "<tr><td>" + questions1[i].question +
                 "<form action='/removeQuestion' method='POST'>" +
-                  "<input style='display:none' type='textarea' name='question' readonly='true' value='" + questions[i].question + "'/>" +
+                  "<input style='display:none' type='textarea' name='question' readonly='true' value='" + questions1[i].question + "'/>" +
                   "<input type='submit' name='submit' value='x'/>" +
                 "</form></td><td>";
               } else {
