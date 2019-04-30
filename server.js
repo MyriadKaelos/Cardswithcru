@@ -47,9 +47,10 @@ router.post('/playCard', function(req,res) {
     db.collection('users').find({name:req.body.name}).toArray((err, player) => {
       db.collection('deckA').find({}).toArray((err, answers) => {
         player[0].hand = player[0].hand.filter(cards => cards != req.body.answer);
-        var answer = answers[Math.floor(Math.random() * answers.length)].answer;
+        var int = Math.floor(Math.random() * answers.length)
+        var answer = answers[int].answer.replace("'","/'");
         player[0].hand.push(answer);
-        db.collection('deckA').deleteOne({answer:answer});
+        db.collection('deckA').deleteOne({answer:answers[int].answer});
         db.collection('users').updateOne({name:req.body.name},{$set:{hand:player[0].hand}});
         db.collection('deckA').insertOne({answer:req.body.answer});
         db.collection('users').find({}).toArray((err, users) => {
@@ -161,10 +162,10 @@ router.post('/addUser', function(req,res) {
       if(answers.length > 6) {
         for(var i = 0; i < 6; i ++) {
           var int = Math.floor(Math.random() * deckA.length);
-          var answer = deckA[int].answer;
+          var answer = deckA[int].answer.replace("'","/'");
           hand.push(answer);
-          db.collection('deckA').deleteOne({answer:answer});
-          deckA = deckA.filter(cards => cards.answer != answer);
+          db.collection('deckA').deleteOne({answer:deckA[int].answer});
+          deckA = deckA.filter(cards => cards.answer != deckA[int].answer);
         }
         db.collection('users').find({name:req.body.name}).toArray((err, alreadyNamed) => {
           if(alreadyNamed.length>0) {
