@@ -24,14 +24,14 @@
           for(var i = 0; i < play1.played.length;i++) {
             judgeHand += "<form action='/choseCard' method='POST' class='hand'>" +
                       "<input style='display:none' type='textarea' name='answer'" +
-                      "readonly='true' value='" + play1.played[i].answer + "'/>" +
+                      "readonly='true' value=\"" + play1.played[i].answer.replace("'","\'") + "\"/>" +
                       "<input style='display:none' type='textarea' name='name'" +
                       "readonly='true' value='" + play1.played[i].name + "'/>" +
                       "<input style='display:none' type='textarea' name='question'" +
                       "readonly='true' value='" + play1.question + "'/>" +
                       "<input style='display:none' type='textarea' name='player'" +
                       "readonly='true' value='<%=player.name%>'/>" +
-                      "<input type='submit' name = 'submit' value='" + play1.played[i].answer + "'/>" +
+                      "<input type='submit' name = 'submit' value=\"" + play1.played[i].answer.replace("'","\'") + "\"/>" +
                       "</form>";
           }
           $("#judge").html(judgeHand)
@@ -141,6 +141,7 @@
             <input style='display:none' type="textarea" name="name" readonly="true" value='<%=play.played[i].name %>'/>
             <input style='display:none' type="textarea" name="question" readonly="true" value='<%=play.question %>'/>
             <input style='display:none' type="textarea" name="player" readonly="true" value='<%=player.name %>'/>
+            <input style='display:none' type='textarea' name='hand' readonly='true' value='<%=player.hand.length%>'/>
             <input type="submit" name = "submit" value="<%=play.played[i].answer %>"/>
           </form>
           <% } %>
@@ -153,8 +154,8 @@
       <div id='nextRoundButton' style='display:none'>
         <form action='/nextRound' method="POST">
           <p id='trophy'></p>
-          <input style='display:none' type="textarea" name="name" readonly="true" value='<%=player.name %>'/>
-          <input style='background-color:white' type="submit" name = "submit" value="Next Round"/>
+          <input style='display:none' type='textarea' name='name' readonly='true' value='<%=player.name %>'/>
+          <input style='background-color:white' type='submit' name='submit' value='Next Round'/>
         </form>
       </div>
     </div>
